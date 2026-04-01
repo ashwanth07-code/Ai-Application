@@ -243,9 +243,12 @@ app.get('/health', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🌐 Frontend URL: http://localhost:3000`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+// Add this at the very end of backend/server.js
+if (process.env.VERCEL) {
+  module.exports = app;
+}
